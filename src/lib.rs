@@ -1,5 +1,5 @@
 #![doc(html_root_url = "https://docs.rs/warp/0.3.2")]
-#![deny(missing_docs)]
+// #![deny(missing_docs)]
 #![deny(missing_debug_implementations)]
 #![deny(rust_2018_idioms)]
 #![cfg_attr(test, deny(warnings))]
