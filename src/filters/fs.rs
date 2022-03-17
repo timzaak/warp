@@ -139,14 +139,14 @@ pub struct Conditionals {
     if_range: Option<IfRange>,
     range: Option<Range>,
 }
-
-enum Cond {
+#[derive(Debug)]
+pub enum Cond {
     NoBody(Response),
     WithBody(Option<Range>),
 }
 
 impl Conditionals {
-    fn check(self, last_modified: Option<LastModified>) -> Cond {
+    pub fn check(self, last_modified: Option<LastModified>) -> Cond {
         if let Some(since) = self.if_unmodified_since {
             let precondition = last_modified
                 .map(|time| since.precondition_passes(time.into()))
