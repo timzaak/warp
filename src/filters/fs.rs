@@ -354,10 +354,10 @@ fn file_conditional(
         File { resp, path }
     })
 }
+#[derive(Debug)]
+pub struct BadRange;
 
-struct BadRange;
-
-fn bytes_range(range: Option<Range>, max_len: u64) -> Result<(u64, u64), BadRange> {
+pub fn bytes_range(range: Option<Range>, max_len: u64) -> Result<(u64, u64), BadRange> {
     use std::ops::Bound;
 
     let range = if let Some(range) = range {
@@ -400,7 +400,7 @@ fn bytes_range(range: Option<Range>, max_len: u64) -> Result<(u64, u64), BadRang
     ret
 }
 
-fn file_stream(
+pub fn file_stream(
     mut file: TkFile,
     buf_size: usize,
     (start, end): (u64, u64),
@@ -464,7 +464,7 @@ fn reserve_at_least(buf: &mut BytesMut, cap: usize) {
 
 const DEFAULT_READ_BUF_SIZE: usize = 8_192;
 
-fn optimal_buf_size(metadata: &Metadata) -> usize {
+pub fn optimal_buf_size(metadata: &Metadata) -> usize {
     let block_size = get_block_size(metadata);
 
     // If file length is smaller than block size, don't waste space
