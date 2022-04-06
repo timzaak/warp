@@ -134,10 +134,10 @@ pub fn sanitize_path(base: impl AsRef<Path>, tail: &str) -> Result<PathBuf, Reje
 
 #[derive(Debug)]
 pub struct Conditionals {
-    if_modified_since: Option<IfModifiedSince>,
-    if_unmodified_since: Option<IfUnmodifiedSince>,
-    if_range: Option<IfRange>,
-    range: Option<Range>,
+    pub if_modified_since: Option<IfModifiedSince>,
+    pub if_unmodified_since: Option<IfUnmodifiedSince>,
+    pub if_range: Option<IfRange>,
+    pub range: Option<Range>,
 }
 #[derive(Debug)]
 pub enum Cond {
