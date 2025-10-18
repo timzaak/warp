@@ -1,3 +1,29 @@
+# CHANGELOG
+
+### v0.4.2 (August 19, 2025)
+
+- **Features**:
+  - Add support for passing `UnixListener` to `incoming(listener)`.
+- **Fixes**:
+  - Reduce some dependencies when `server` is not enabled.
+
+### v0.4.1 (August 6, 2025)
+
+- **Fixes**:
+  - Fix `Server::graceful()` bounds incorrect requiring the filter to be a future.
+  - Enable `tokio/net` when the `server` feature is enabled.
+  - Render `cfg`s in the docs.
+
+## v0.4.0 (August 5, 2025)
+
+- **Changes**:
+  - Upgrade to `hyper`, `http`, and `http-body` to v1.
+  - Remove `multipart` and `websocket` features from being enabled by default.
+  - Put `warp::serve()` behind a `server` feature, not enabled by default.
+  - Put `warp::test` behind a `test` feature, not enabled by default.
+  - Remove `tls` feature and types.
+  - Remove `warp::addr` filters.
+
 ### v0.3.7 (April 5, 2024)
 
 - **Features**:
