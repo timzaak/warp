@@ -108,7 +108,7 @@ fn path_from_tail(
     })
 }
 
-fn sanitize_path(base: impl AsRef<Path>, tail: &str) -> Result<PathBuf, Rejection> {
+pub fn sanitize_path(base: impl AsRef<Path>, tail: &str) -> Result<PathBuf, Rejection> {
     let mut buf = PathBuf::from(base.as_ref());
     let p = match percent_decode_str(tail).decode_utf8() {
         Ok(p) => p,
@@ -136,20 +136,20 @@ fn sanitize_path(base: impl AsRef<Path>, tail: &str) -> Result<PathBuf, Rejectio
 }
 
 #[derive(Debug)]
-struct Conditionals {
-    if_modified_since: Option<IfModifiedSince>,
-    if_unmodified_since: Option<IfUnmodifiedSince>,
-    if_range: Option<IfRange>,
-    range: Option<Range>,
+pub struct Conditionals {
+    pub if_modified_since: Option<IfModifiedSince>,
+    pub if_unmodified_since: Option<IfUnmodifiedSince>,
+    pub if_range: Option<IfRange>,
+    pub range: Option<Range>,
 }
-
-enum Cond {
+#[derive(Debug)]
+pub enum Cond {
     NoBody(Response),
     WithBody(Option<Range>),
 }
 
 impl Conditionals {
-    fn check(self, last_modified: Option<LastModified>) -> Cond {
+    pub fn check(self, last_modified: Option<LastModified>) -> Cond {
         if let Some(since) = self.if_unmodified_since {
             let precondition = last_modified
                 .map(|time| since.precondition_passes(time.into()))
@@ -198,7 +198,7 @@ impl Conditionals {
     }
 }
 
-fn conditionals() -> impl Filter<Extract = One<Conditionals>, Error = Infallible> + Copy {
+pub fn conditionals() -> impl Filter<Extract = One<Conditionals>, Error = Infallible> + Copy {
     crate::header::optional2()
         .and(crate::header::optional2())
         .and(crate::header::optional2())
@@ -247,7 +247,7 @@ impl File {
 
 // Silly wrapper since Arc<PathBuf> doesn't implement AsRef<Path> ;_;
 #[derive(Clone, Debug)]
-struct ArcPath(Arc<PathBuf>);
+pub struct ArcPath(pub Arc<PathBuf>);
 
 impl AsRef<Path> for ArcPath {
     fn as_ref(&self) -> &Path {
@@ -261,7 +261,7 @@ impl Reply for File {
     }
 }
 
-fn file_reply(
+pub fn file_reply(
     path: ArcPath,
     conditionals: Conditionals,
 ) -> impl Future<Output = Result<File, Rejection>> + Send {
@@ -357,10 +357,10 @@ fn file_conditional(
         File { resp, path }
     })
 }
+#[derive(Debug)]
+pub struct BadRange;
 
-struct BadRange;
-
-fn bytes_range(range: Option<Range>, max_len: u64) -> Result<(u64, u64), BadRange> {
+pub fn bytes_range(range: Option<Range>, max_len: u64) -> Result<(u64, u64), BadRange> {
     use std::ops::Bound;
 
     let range = if let Some(range) = range {
@@ -403,7 +403,7 @@ fn bytes_range(range: Option<Range>, max_len: u64) -> Result<(u64, u64), BadRang
     ret
 }
 
-fn file_stream(
+pub fn file_stream(
     mut file: TkFile,
     buf_size: usize,
     (start, end): (u64, u64),
@@ -467,7 +467,7 @@ fn reserve_at_least(buf: &mut BytesMut, cap: usize) {
 
 const DEFAULT_READ_BUF_SIZE: usize = 8_192;
 
-fn optimal_buf_size(metadata: &Metadata) -> usize {
+pub fn optimal_buf_size(metadata: &Metadata) -> usize {
     let block_size = get_block_size(metadata);
 
     // If file length is smaller than block size, don't waste space

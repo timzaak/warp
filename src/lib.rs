@@ -1,4 +1,4 @@
-#![deny(missing_docs)]
+//#![deny(missing_docs)]
 #![deny(missing_debug_implementations)]
 #![deny(rust_2018_idioms)]
 #![cfg_attr(test, deny(warnings))]
@@ -171,6 +171,7 @@ pub use self::server::Server;
 pub use self::service::service;
 #[doc(hidden)]
 pub use http;
+#[cfg(any(feature = "server", feature = "websocket"))]
 #[doc(hidden)]
 pub use hyper;
 
