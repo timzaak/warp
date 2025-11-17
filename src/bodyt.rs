@@ -56,7 +56,7 @@ impl Body {
         Body(http_body_util::BodyExt::boxed(body))
     }
 
-    pub(crate) fn wrap_stream<S, B, E>(stream: S) -> Self
+    pub fn wrap_stream<S, B, E>(stream: S) -> Self
     where
         S: futures_util::Stream<Item = Result<B, E>> + Send + Sync + 'static,
         B: Into<Bytes>,

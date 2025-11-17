@@ -86,7 +86,7 @@
 //! [Filter]: trait.Filter.html
 //! [reject]: reject/index.html
 
-mod bodyt;
+pub mod bodyt;
 #[macro_use]
 mod error;
 mod filter;
